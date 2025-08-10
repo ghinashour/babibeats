@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
 {
-    /** @use HasFactory<\Database\Factories\AlbumFactory> */
-    use HasFactory;
+     protected $fillable = ['artist_id','title','released_at','cover_image'];
+
+  public function artist(){
+     return $this->belongsTo(Artist::class); 
+    }
+
+  public function tracks(){
+     return $this->hasMany(Track::class);
+     }
+     
+    public function favorites()
+{
+    return $this->morphMany(Favorite::class, 'favoritable');
+}
+
 }

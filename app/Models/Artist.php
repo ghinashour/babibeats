@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
-    /** @use HasFactory<\Database\Factories\ArtistFactory> */
-    use HasFactory;
+     protected $fillable = ['name','bio','profile_image'];
+
+  public function albums(){ return $this->hasMany(Album::class); }
+  public function tracks(){ return $this->hasMany(Track::class); }
 }
