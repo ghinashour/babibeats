@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tracks', function (Blueprint $table) {
-            $table->id();
+             $table->id();
+            $table->foreignId('album_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('artist_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->integer('duration_seconds')->nullable();
+            $table->string('file_path')->nullable(); // sample storage path
             $table->timestamps();
         });
     }

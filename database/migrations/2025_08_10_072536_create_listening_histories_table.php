@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('listening_histories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('track_id')->constrained()->onDelete('cascade');
+            $table->timestamp('played_at')->useCurrent();
+            $table->integer('duration_played')->nullable(); // seconds listened
+            $table->string('device')->nullable();
             $table->timestamps();
         });
     }

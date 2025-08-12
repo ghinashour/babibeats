@@ -13,10 +13,7 @@ class Playlist extends Model
         {
             return $this->belongsTo(User::class);
         }
-        public function tracks()
-        {
-         return $this->belongsToMany(Track::class, 'playlist_track')->withPivot('position')->withTimestamps(); 
-        }
+       
 
             public function tracks()
         {
@@ -29,6 +26,8 @@ class Playlist extends Model
         {
             return $this->morphMany(Favorite::class, 'favoritable');
         }
+
+        
 
 
 }

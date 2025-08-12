@@ -11,10 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('playlist_track', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+         Schema::create('playlist_track', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('playlist_id')
+              ->constrained()
+              ->onDelete('cascade');
+
+        $table->foreignId('track_id')
+              ->constrained()
+              ->onDelete('cascade');
+
+        $table->integer('position')->nullable(); // optional ordering in playlist
+        $table->timestamps();
+    });
     }
 
     /**

@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Favorite extends Model
 {
-    /** @use HasFactory<\Database\Factories\FavoriteFactory> */
-    use HasFactory;
-}
+    protected $fillable = ['user_id'];
+
+    // This allows Laravel to figure out what model is being favorited
+    public function favoritable()
+    {
+        return $this->morphTo();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+   }

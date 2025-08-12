@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+
+             // The user who favorites something
+              $table->foreignId('user_id')
+              ->constrained()
+              ->onDelete('cascade');
+
+                // Polymorphic fields: favoritable_id + favoritable_type
+            $table->morphs('favoritable'); 
+            // This creates: favoritable_id (BIGINT) & favoritable_type (string)
+
+            $table->timestamps(); 
         });
     }
 
