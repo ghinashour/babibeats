@@ -1,61 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Babibeats API Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Introduction
 
-## About Laravel
+Babibeats is a modern music platform designed to connect listeners with songs, artists, and playlists in a personalized way.  
+This repository contains the **backend API service** for Babibeats, developed using **Laravel** and **SQLite**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The API will provide endpoints for user authentication, music data retrieval, search functionality, playlist management, and personalized recommendations.  
+It will serve as the foundation for future web and mobile applications that interact with the Babibeats ecosystem.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Project Proposal
 
-## Learning Laravel
+### 1. Project Overview
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Babibeats is a musical platform that connects users with songs, artists, and playlists in a personalized and engaging way.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+The **Babibeats API Service** will be developed using **Laravel** and will serve as the backend for the platform, providing a secure and efficient way for client applications (web, mobile, or third-party integrations) to interact with music content and user data stored in an **SQLite database**.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+### 2. Objectives
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+-   Build a **RESTful API** using Laravel that supports core music platform functionalities.
+-   Ensure **secure, authenticated** user interactions.
+-   Implement **search, playlist management, and recommendations**.
+-   Maintain **performance, scalability, and clean code architecture**.
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3. Main Functionalities
 
-## Contributing
+#### A. User Management
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+-   **Registration & Login** (JWT authentication via Laravel Sanctum or Passport)
+-   Profile management (update name, email, password)
+-   Secure password storage (Laravel's hashing mechanism)
 
-## Code of Conduct
+#### B. Music Data Retrieval
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   Retrieve song details (title, artist, album, duration, genre, release date)
+-   Get album details and associated tracks
+-   Get artist profiles and their songs
+-   Provide secure streaming URLs
 
-## Security Vulnerabilities
+#### C. Search & Discovery
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   Search songs, albums, and artists
+-   Browse by genre or popularity
+-   Discover trending and recommended music
 
-## License
+#### D. Playlist Management
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   Create, update, and delete playlists
+-   Add/remove songs from playlists
+-   Retrieve user playlists
+
+#### E. Recommendations
+
+-   Personalized song recommendations based on listening history
+-   Suggest similar artists/tracks
+
+#### F. User Interaction
+
+-   Like/unlike songs
+-   Retrieve most liked songs
+
+---
+
+### 4. Technology Stack
+
+-   **Backend Framework:** Laravel (PHP)
+-   **Database:** SQLite
+-   **Authentication:** Laravel Sanctum / Passport (JWT)
+-   **API Documentation:** Laravel API resources + Postman collection
+-   **Hosting (future):** AWS, Render, or Heroku
+
+---
+
+### 5. API Endpoints (Draft)
+
+| Method | Endpoint                             | Description                          |
+| ------ | ------------------------------------ | ------------------------------------ |
+| POST   | `/api/register`                      | Register a new user                  |
+| POST   | `/api/login`                         | User login                           |
+| GET    | `/api/user`                          | Get authenticated user profile       |
+| GET    | `/api/songs`                         | List all songs                       |
+| GET    | `/api/songs/{id}`                    | Get song details                     |
+| GET    | `/api/albums/{id}`                   | Get album details                    |
+| GET    | `/api/artists/{id}`                  | Get artist details                   |
+| GET    | `/api/search`                        | Search for songs, albums, or artists |
+| POST   | `/api/playlists`                     | Create a playlist                    |
+| PUT    | `/api/playlists/{id}`                | Update playlist                      |
+| DELETE | `/api/playlists/{id}`                | Delete playlist                      |
+| POST   | `/api/playlists/{id}/songs`          | Add song to playlist                 |
+| DELETE | `/api/playlists/{id}/songs/{songId}` | Remove song from playlist            |
+| POST   | `/api/songs/{id}/like`               | Like a song                          |
+| DELETE | `/api/songs/{id}/like`               | Unlike a song                        |
+
+---
+
+### 6. Expected Deliverables
+
+1. Laravel-based **RESTful API** with core music platform features.
+2. **Well-documented** endpoints (Postman collection + API resource descriptions).
+3. SQLite database with seeders for initial data.
+4. Source code in GitHub with proper commit history and README.
+
+---
+
+### 7. Future Enhancements
+
+-   Real-time streaming analytics
+-   Social sharing features
+-   Offline mode support
+-   Integration with third-party music APIs (Spotify, Apple Music)
+
+---
+
+### 8. Developer Notes
+
+-   Follow Laravel’s **MVC structure** for maintainable code.
+-   Use **Migrations & Seeders** for database setup.
+-   Use **Eloquent ORM** for database interactions.
+-   Apply **Form Request Validation** for incoming API data.
+-   Ensure **CORS policy** is properly configured for frontend communication.
