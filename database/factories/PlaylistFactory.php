@@ -9,15 +9,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PlaylistFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Playlist::class;
+
     public function definition(): array
     {
         return [
-            //
+            'user_id' =>User::factory(),
+            'name'=> $this ->faker ->sentence(2),
         ];
     }
 }

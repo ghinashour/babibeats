@@ -9,15 +9,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ArtistFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+
+    protected $model = \App\Models\Artist::class;
+
+    public function definition():array
     {
         return [
-            //
+            'name'=> $this -> faker-> name,
+            'bio' => $this ->faker -> paragraph,
         ];
     }
 }

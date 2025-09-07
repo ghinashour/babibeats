@@ -14,10 +14,15 @@ class AlbumFactory extends Factory
      *
      * @return array<string, mixed>
      */
+
+    protected $model = Album::class;
+
     public function definition(): array
     {
         return [
-            //
+            'artist_id' =>Artist::factory(),//auto create artist if not provided
+            'title' => $this->faker->sentence(3),
+            'released_at' => $this->faker->date(),
         ];
     }
 }
