@@ -15,6 +15,7 @@ class Favorite extends Model
         return $this->morphTo();
     }
 
+    //each favorite belong to one user matching his preferences
     public function user()
     {
         return $this->belongsTo(User::class);

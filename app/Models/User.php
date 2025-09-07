@@ -46,6 +46,7 @@ class User extends Authenticatable
         ];
     }
 
+    //user can have more that one favorite
     public function favorites()
 {
     return $this->hasMany(Favorite::class);

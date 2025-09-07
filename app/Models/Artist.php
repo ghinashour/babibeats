@@ -11,4 +11,5 @@ class Artist extends Model
 
   public function albums(){ return $this->hasMany(Album::class); }
   public function tracks(){ return $this->hasMany(Track::class); }
+  public function favorites(){return $this -> morphmany(Favorite::class, 'favorable')}
 }
