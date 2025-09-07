@@ -13,16 +13,12 @@ return new class extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-
              // The user who favorites something
               $table->foreignId('user_id')
               ->constrained()
               ->onDelete('cascade');
-
-                // Polymorphic fields: favoritable_id + favoritable_type
-            $table->morphs('favoritable'); 
-            // This creates: favoritable_id (BIGINT) & favoritable_type (string)
-
+            $table->unsignedBigInteger('favorable_id'); // polymorphic ID
+            $table->string('favorable_type'); // polymorphic Type (Track, Album, Playlist, Artist)
             $table->timestamps(); 
         });
     }
