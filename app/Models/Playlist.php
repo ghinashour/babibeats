@@ -14,7 +14,7 @@ class Playlist extends Model
         {
             return $this->belongsTo(User::class);
         }
-        //many tracks can have many playlists using a pivot table
+        //many tracks can have many playlists using a pivot
             public function tracks()
         {
             return $this->belongsToMany(Track::class, 'playlist_track')
