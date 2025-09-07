@@ -7,11 +7,10 @@ use Illuminate\Database\Seeder;
 
 class TrackSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
     {
-        //
+        // 30 standalone tracks
+        Track::factory()->count(30)->create();
     }
 }
