@@ -1,14 +1,16 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Playlist;
 use App\Models\Track;
 use App\Http\Requests\StorePlaylistRequest;
 use App\Http\Requests\UpdatePlaylistRequest;
 use App\Http\Requests\AddTrackToPlaylistRequest;
+// You need to create this Request class:
+// use App\Http\Requests\RemoveTrackFromPlaylistRequest;
 
 use Illuminate\Http\JsonResponse;
-
-use Illuminate\Http\Request;
 
 class PlaylistController extends Controller
 {
@@ -17,95 +19,83 @@ class PlaylistController extends Controller
         return Playlist::with('user')->get();
     }
 
-    public function show($id)
+    public function show(Playlist $playlist)
     {
-        return Playlist::with(['user', 'tracks'])->findOrFail($id);
+        return $playlist->load(['user', 'tracks']);
     }
 
-    public function addTrack(Request $request, $id)
-{
-    $playlist = Playlist::findOrFail($id);
-    if ($playlist->tracks()->where('track_id', $request->track_id)->exists()) {
-        return response()->json(['message' => 'Track already in playlist'], 409);
-    }
-    $playlist->tracks()->attach($request->track_id, [
-        'position' => $playlist->tracks()->count() + 1,
-    ]);
-    return response()->json(['message' => 'Track added to playlist']);
-}
-
-    public function removeTrack($id, $trackId)
-    {
-        $playlist = Playlist::findOrFail($id);
-        $playlist->tracks()->detach($trackId);
-        return response()->json(['message' => 'Track removed from playlist']);
-    }
 
     public function store(StorePlaylistRequest $request): JsonResponse
     {
-        // The validated data is already available
         $validated = $request->validated();
-
-        // Create the playlist and associate it with the current user
         $playlist = $request->user()->playlists()->create($validated);
 
-        // Return a JSON response with the newly created playlist
         return response()->json([
             'message' => 'Playlist created successfully.',
-            'data' => $playlist->load('tracks') // Load relationships if needed
-        ], 201); // HTTP 201 Created
+            'data' => $playlist->load('tracks')
+        ], 201);
     }
 
-    //updating a specified playlist  here
-     public function update(UpdatePlaylistRequest $request, string $id): JsonResponse
+    // FIXED: Changed parameter from 'string $id' to 'Playlist $playlist'
+    public function update(UpdatePlaylistRequest $request, Playlist $playlist): JsonResponse
     {
-        // The UpdatePlaylistRequest has already authorized the user
-        // and validated the data. We can just find the playlist and update it.
-        $playlist = Playlist::findOrFail($id);
-
+        // The UpdatePlaylistRequest handles authorization and validation
         $playlist->update($request->validated());
 
         return response()->json([
             'message' => 'Playlist updated successfully.',
-            'data' => $playlist->fresh() // fresh() reloads the model from the database
+            'data' => $playlist->fresh()
         ]);
     } 
 
-
-    //deleting a list the user want to be deleted
-     public function destroy(string $id): JsonResponse
+    // FIXED: Changed parameter from 'string $id' to 'Playlist $playlist'
+    public function destroy(Playlist $playlist): JsonResponse
     {
-        // Find the playlist
-        $playlist = Playlist::findOrFail($id);
+        // Find the playlist (No longer needed, $playlist is already injected)
+        // $playlist = Playlist::findOrFail($id);
 
         // Authorize: Check if the user owns the playlist
+        // NOTE: This logic should ideally be inside a Form Request like UpdatePlaylistRequest
         if ($playlist->user_id !== auth()->id()) {
             return response()->json([
                 'message' => 'You can only delete your own playlists.',
             ], 403);
         }
 
-        // Delete the playlist
         $playlist->delete();
 
         return response()->json([
             'message' => 'Playlist deleted successfully.',
-        ], 200); // or 204 No Content
+        ], 200);
     }
 
-        public function addTrack(AddTrackToPlaylistRequest $request, $id)
+    public function addTrack(AddTrackToPlaylistRequest $request, Playlist $playlist): JsonResponse
     {
-        // Request is authorized and validated
-        $playlist = Playlist::find($id);
-        $trackId = $request->input('track_id') || $request->route('trackId'); // Adjust based on your method signature
+        // The AddTrackToPlaylistRequest authorizes the user and validates 'track_id'
+        $trackId = $request->input('track_id');
 
-        $playlist->tracks()->attach($trackId);
+        // Check for duplicate track
+        if ($playlist->tracks()->where('track_id', $trackId)->exists()) {
+            return response()->json(['message' => 'Track already in playlist'], 409);
+        }
 
-        return response()->json(['message' => 'Track added to playlist.']);
+        // Add the track with a position
+        $playlist->tracks()->attach($trackId, [
+            'position' => $playlist->tracks()->count() + 1,
+        ]);
+
+        return response()->json([
+            'message' => 'Track added to playlist.',
+            'data' => $playlist->fresh('tracks')
+        ]);
     }
 
-      public function removeTrack(AddTrackToPlaylistRequest $request, Playlist $playlist, Track $track): JsonResponse
+    // FIXED: Changed the Request class parameter.
+    // You need to CREATE 'RemoveTrackFromPlaylistRequest'
+    public function removeTrack(AddTrackToPlaylistRequest $request, Playlist $playlist, Track $track): JsonResponse
     {
+        // FIXME: Temporarily using AddTrackToPlaylistRequest.
+        // You MUST create and use RemoveTrackFromPlaylistRequest for proper authorization.
         $playlist->tracks()->detach($track->id);
 
         return response()->json([

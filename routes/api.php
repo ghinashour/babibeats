@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
     // Alternative to the above line: define each route manually as shown below.
     Route::post('/playlists/{id}/tracks', [PlaylistController::class, 'addTrack']);
-    Route::delete('/playlists/{id}/tracks/{trackId}', [PlaylistController::class, 'removeTrack']);
+    Route::delete('/playlists/{playlistId}/tracks/{trackId}', [PlaylistController::class, 'removeTrack']);
 
     // Tracks (Create/Upload)
     Route::post('/tracks', [TrackController::class, 'store']);

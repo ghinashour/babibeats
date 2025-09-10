@@ -1,24 +1,27 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Requests\StoreTrackRequest;
 use App\Http\Requests\UpdateTrackRequest;
 use App\Models\Track;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 
-use Illuminate\Http\Request;
-
 class TrackController extends Controller
 {
-    public function index(){
-        return Track::with(['artist', 'album'])->paginate(20);
-    }
-    public function show($id){
-        return Track::with(['artist', 'album'])->findOrFail($id);
+    public function index(): JsonResponse
+    {
+        $tracks = Track::with(['artist', 'album'])->paginate(20);
+        return response()->json($tracks);
     }
 
-     public function store(StoreTrackRequest $request): JsonResponse
+    public function show(Track $track): JsonResponse // FIXED: Route Model Binding
+    {
+        return response()->json($track->load(['artist', 'album']));
+    }
+
+    public function store(StoreTrackRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
@@ -36,9 +39,6 @@ class TrackController extends Controller
         ], 201);
     }
 
-    /**
-     * Update the specified track.
-     */
     public function update(UpdateTrackRequest $request, Track $track): JsonResponse
     {
         $validated = $request->validated();
@@ -62,9 +62,6 @@ class TrackController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified track.
-     */
     public function destroy(Track $track): JsonResponse
     {
         // Delete associated file
