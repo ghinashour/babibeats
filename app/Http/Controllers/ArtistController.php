@@ -10,7 +10,7 @@ class ArtistController extends Controller
     public function index(){
         return Artist::all();
     }
-    public function sohw($id){
+    public function show($id){
         return Artist::with('albums.tracks')->findOrFail($id);
     }
 }
