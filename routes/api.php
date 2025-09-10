@@ -10,6 +10,7 @@ use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\PlaylistController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -18,6 +19,12 @@ use App\Http\Controllers\PlaylistController;
 
 // Login to get API token
 Route::post('/login', function (Request $request) {
+    
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
