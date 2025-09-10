@@ -9,6 +9,25 @@ use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\TrackController;
 use App\Http\Controllers\PlaylistController;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+
+
+// Configure rate limiting
+RateLimiter::for('api', function (Request $request) {
+    return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+});
+
+RateLimiter::for('login', function (Request $request) {
+    return Limit::perMinute(5)->by($request->ip());
+});
+
+RateLimiter::for('uploads', function (Request $request) {
+    return Limit::perMinute(10)->by($request->user()?->id ?: $request->ip());
+});
+
+
 
 // Public routes (login, browse artists, albums, tracks)
 Route::post('/login', function (Request $request) {
@@ -30,9 +49,10 @@ Route::post('/login', function (Request $request) {
         'user' => $user,
         'token' => $token
     ]);
-});
+})->middleware('throttle:login');
 
-
+// Public routes with rate limiting
+Route::middleware('throttle:60,1')->group(function () {
 Route::get('/artists', [ArtistController::class, 'index']);
 Route::get('/artists/{id}', [ArtistController::class, 'show']);
 Route::get('/albums', [AlbumController::class, 'index']);
@@ -40,8 +60,13 @@ Route::get('/albums/{id}', [AlbumController::class, 'show']);
 Route::get('/tracks', [TrackController::class, 'index']);
 Route::get('/tracks/{id}', [TrackController::class, 'show']);
 
+});
+
+
+
+
 // Protected Routes (Require Authentication)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','throttle:api'])->group(function () {
 
     // Users (Read-only in this case)
     Route::get('/users', [UserController::class, 'index']);
